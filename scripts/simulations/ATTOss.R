@@ -13,9 +13,16 @@ sapply(X=c("~/MPIBGC-TEE/porce/scripts/initial_functions/makeB.R",
       FUN=source)
 load("~/SOIL-R/Manuscripts/RadiocarbonPorce/Data/modpars.Rdata") # Model parameters from Sierra et al. (2021, J Ecology)
 
-GPPmean<- 300 * 1e-06 * 1e04 *12 # gC/m2/month (1Mg/10e6 g) * (1e04 m2/1ha) * (12 month/1yr) -> MgC/ha/yr
+monthly_gpp<-read.csv("~/MPIBGC-TEE/porce/scripts/simulations/ATTO_INST_monthlyGPP_2014_2019.csv")
 
-atto_gpp<-rnorm(n=nrow(modpars), mean=GPPmean, sd=5)
+matplot(as.Date(monthly_gpp[,1]), monthly_gpp[,-1]* 1e-06 * 1e04 *12, type="l", lty=1, col=1:3, ylab="GPP (MgC ha-1 yr-1)", xlab="Calendar year",
+        ylim=c(0,50), bty="n")
+
+GPPmean<- mean(monthly_gpp$GPP_U50_f) * 1e-06 * 1e04 *12 # gC/m2/month (1Mg/10e6 g) * (1e04 m2/1ha) * (12 month/1yr) -> MgC/ha/yr
+GPPsd<- sd(monthly_gpp$GPP_U50_f) * 1e-06 * 1e04 *12 # gC/m2/month (1Mg/10e6 g) * (1e04 m2/1ha) * (12 month/1yr) -> MgC/ha/yr
+
+atto_gpp<-rnorm(n=nrow(modpars), mean=GPPmean, sd=GPPsd)
+hist(atto_gpp)
 
 #stocksATTO<-steady_stocks(gpp=GPPmean, pars=modpars[1,])
 
@@ -65,7 +72,7 @@ NHZ3<-data.frame(Year=c(Hua2021$NHZone3[-(937:939),1], fNHZ3$time),
 
 ## Plot
 library(imager)
-atto_gpp<-rnorm(n=10000, mean=GPPmean, sd=5)
+atto_gpp<-rnorm(n=10000, mean=GPPmean, sd=GPPsd)
 
 graygpp<-as.cimg(matrix(atto_gpp/max(atto_gpp),100,100))
 plot(graygpp)
