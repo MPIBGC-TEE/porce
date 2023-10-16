@@ -1,5 +1,6 @@
 Package: porce
-Title: Photosynthesis, allocation, Organic matter dynamics and RadioCarbon Exchange (Porce) model
+Title: Photosynthesis, allocation, Organic matter dynamics and
+        RadioCarbon Exchange (Porce) model
 Version: 0.0.1
 Authors@R: 
     person("Carlos A.", "Sierra", , "csierra@bgc-jena.mpg.de", role = c("aut", "cre"),
@@ -11,3 +12,9 @@ Imports: methods
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3.9000
+NeedsCompilation: no
+Packaged: 2023-10-16 13:32:08 UTC; csierra
+Author: Carlos A. Sierra [aut, cre] (<https://orcid.org/0000-0003-0009-4169>)
+Maintainer: Carlos A. Sierra <csierra@bgc-jena.mpg.de>
+Depends: R (>= 3.5.0)
+Built: R 4.3.1; ; 2023-10-16 13:32:30 UTC; unix

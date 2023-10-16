@@ -1,0 +1,107 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "porce"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('porce')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("inputGPP")
+> ### * inputGPP
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: inputGPP
+> ### Title: Input vector from a scalar gpp value
+> ### Aliases: inputGPP
+> 
+> ### ** Examples
+> 
+> inputGPP(25, 7)
+[1] 25  0  0  0  0  0  0
+> 
+> 
+> 
+> cleanEx()
+> nameEx("lam-class")
+> ### * lam-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: lam-class
+> ### Title: Linear autonomous model
+> ### Aliases: lam-class lam
+> 
+> ### ** Examples
+> 
+> toyModel<-lam(input=c(1,2,3), matrix=diag(-1,3,3))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("makeB")
+> ### * makeB
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: makeB
+> ### Title: Compartmental matrix from a set of prior parameters of Porce
+> ###   model
+> ### Aliases: makeB
+> 
+> ### ** Examples
+> 
+> makeB(pars=modpars[1,])
+            [,1]         [,2]        [,3]          [,4]      [,5]       [,6]
+[1,] -2.98575574  0.000000000  0.00000000  0.0000000000  0.000000  0.0000000
+[2,]  0.52757733 -0.034744214  0.00000000  0.0000000000  0.000000  0.0000000
+[3,]  0.03033816  0.000000000 -0.02648180  0.0000000000  0.000000  0.0000000
+[4,]  0.10326788  0.000000000  0.00000000 -0.0221973427  0.000000  0.0000000
+[5,]  0.95358801  0.000000000  0.02645779  0.0000000000 -2.958238  0.0000000
+[6,]  0.00000000  0.007216634  0.00000000  0.0000163689  0.000000 -0.2421848
+[7,]  0.00000000  0.000000000  0.00000000  0.0000000000  0.547855  0.2420749
+            [,7]
+[1,]  0.00000000
+[2,]  0.00000000
+[3,]  0.00000000
+[4,]  0.00000000
+[5,]  0.00000000
+[6,]  0.00000000
+[7,] -0.01990362
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.067 0.005 0.073 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

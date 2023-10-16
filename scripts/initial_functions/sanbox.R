@@ -11,3 +11,7 @@ equilibriumOutflux(toyModel)
 
 mlist<-list(toyModel, toyModel)
 simplify2array(lapply(mlist, FUN=equilibriumStock))
+
+library(usethis)
+setwd("~/MPIBGC-TEE/porce/pkg/")
+use_mit_license(copyright_holder = "Carlos A. Sierra")
