@@ -1,0 +1,402 @@
+---
+title: "Equilibrium C stocks and fluxes at ATTO represented with the Porce model"
+author: "Carlos A. Sierra"
+date: "2023-10-17"
+output: html_document
+bibliography: attoStocks.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+This document presents a workflow for using the R package `porce` for the computation of equilibrium 
+carbon stocks and respiration for the ATTO site in central Amazonia.
+The `porce` package is a collection of functions that allows the implementation of
+*Photosynthesis, allocation, Organic matter dynamics, and RadioCarbon Exchange* (PORCE) models. 
+Rather than one single model, PORCE models are flexible implementation of different functions
+that can build a compartmental dynamical system, for which stocks and release fluxes can be computed. 
+
+In this document I show how to implement a simple ecosystem model for predicting 
+equilibrium carbon stocks for central Amazon forests, using the Amazon Tall Tower
+Observatory (ATTO) site as a reference. 
+
+The `porce` package and PORCE models build on previous work done at the Porce region of Colombia [@Sierra2021JE],
+where I developed in the past a compartmental model for predicting stocks and fluxes of 
+carbon for seven ecosystem compartments. Parameter values from this previous model
+can be used as prior information for applications in other sites. 
+
+Here, I use data of gross primary production (GPP) from ATTO [@Botia2022] together with prior parameter
+values obtained from the Porce region, to develop a PORCE model for ATTO. In the following
+sections, I show how to setup the simulations and plot the results. 
+
+## Initial setup
+There are three main packages that we will use for this simulation. First, the package
+`porce` which is the main focus of this document and is used to predict C stocks and respiration. 
+Second, the package `parallel`, which
+is used to parallelize the code and use multiple CPU cores. The advantage in speed by using
+this package is enormous. Third, SoilR is used here to run simulations of radiocarbon
+dynamics over time.
+
+```{r, message=FALSE}
+library(porce)
+library(parallel)
+library(SoilR)
+```
+
+We need to specify the number of CPU cores available for the computations. This number
+is different for every machine you would use, so I prefer to use all cores available minus
+two. Using all cores would probably slow down other running tasks in your computer, so it's
+good to leave two cores for other tasks, but you are flexible to specify this as you want. 
+The following code, initializes a cluster in your computer with the desired number of
+cores.
+
+```{r}
+no_cores <- detectCores() - 2
+cl <- makeCluster(no_cores)
+```
+
+Finally, we read the available information for the simulations. GPP data from
+@Botia2022 is available in the same folder where this Rmd file is stored. 
+Prior values of parameter values from @Sierra2021JE is already available inside
+the `porce` package in the object `modpars`. We only need to create a vector of
+names for the pools that we will represent with this model.
+
+```{r}
+monthly_gpp<-read.csv("inputs/ATTO_INST_monthlyGPP_2014_2019.csv")
+pool_names<-c("Foliage", "Wood", "Fine roots", "Coarse roots", "Fine litter", "CWD", "Soil (0-30 cm)")
+```
+
+## Design of the simulations
+Our objective here is to represent C stocks and respiration for all ecosystem compartments
+at equilibrium. We have a time series of monthly values of GPP from 2014 to 2019,
+and 1000 possible sets of parameter values stored in the `modpars` dataset. 
+Therefore, we will produce estimates of stocks and fluxes based on the uncertainty
+of the carbon inputs (i.e. GPP uncertainty) and uncertainty in the values of the
+compartmental matrix that can be build from the available parameter values. 
+For this purpose, we will run a set of 1000 simulations predicting carbon stocks
+and fluxes using 1000 combinations of values of GPP and all parameter sets in `modpars`.
+
+Because we will make predictions based on the assumption of equilibrium where inputs
+and rates do not change over time, we will implement a model of class `lam`, linear
+autonomous model [@Sierra2018JAMES]. This type of models only require knowledge on 
+the vector of carbon inputs to the system, and a compartmental matrix with fixed
+coefficients. In the following sections, I will show how to build these components
+of a `lam` using functions available in `porce`.
+
+## Building vectors of carbon inputs
+First, let's plot the available GPP data for ATTO. @Botia2022 provide three time 
+series of GPP (units of gC m^-2^ month^-1^ ) for different wind friction velocity
+corrections (u*). We can plot the data and see that the series suggest the system
+in a quasy-equilibrium, without long-term trends but with some seasonal dynamics.
+
+```{r}
+matplot(as.Date(monthly_gpp[,1]), monthly_gpp[,-1]* 1e-06 * 1e04 *12, type="l", 
+        lty=1, col=1:3, ylab=expression(paste("GPP (MgC h", a^-1, " y", r^-1,")")), xlab="Calendar year",
+        ylim=c(0,50), bty="n")
+```
+
+Because we are interested in simulating the uncertainty in GPP assuming the system
+in equilibrium, we ignore the seasonal trend and compute an average value of
+GPP with a corresponding uncertainty that includes temporal variability and 
+uncertainty due to the u* correction. 
+
+```{r}
+GPPmean<- mean(unlist(monthly_gpp[-1])) * 1e-06 * 1e04 *12 
+GPPsd<- sd(unlist(monthly_gpp[-1])) * 1e-06 * 1e04 *12 
+```
+
+Notice that in the code above, units are converted from gC m^-2^ month^-1^ to
+Mg C ha^-1^ yr^-1^.
+
+We can now build a vector of 1000 random variates of GPP based on the mean and 
+standard error of the observed values. This standard deviation is obtained as the
+standard deviation of the observed values divided by square root of the number of
+years available in the time series, i.e. $\sqrt{6}$ = `r sqrt(6)`.
+
+```{r}
+set.seed(1033)
+atto_gpp<-rnorm(n=nrow(modpars), mean=GPPmean, sd=GPPsd/sqrt(6))
+hist(atto_gpp)
+```
+
+To build a vector of inputs in the format required for the subsequent simulations
+we use the function `inputGPP` from `porce`. As an example, the input vector
+for the mean value of GPP can be obtained as
+
+```{r}
+inputGPP(GPPmean)
+```
+
+Notice that the GPP only enters the first ecosystem compartment, foliage, and 
+therefore inputs to all other compartments are equal to 0. 
+
+## Building compartmental matrices
+`porce` includes the function `makeB` to take sets of parameters in the `modpars`
+dataset and build a compartmental matrix from it. As an example, we can take the
+first row of the `modpars` dataset and build a compartmental matrix as
+
+```{r}
+modpars[1,]
+makeB(modpars[1,])
+```
+
+Notice that `makeB` is a very special function that only works for parameter
+values in `modpars` because it uses parameter names in `modpars` to build the matrix. 
+In other cases you may need to build your own compartmental
+matrices with user defined functions. 
+
+## Run the simulations and plot the results
+We are now ready to run simulations with the values of GPP and the `modpars` parameter values.
+In `porce` the idea is to build first a model object, and then compute stocks and
+respiration from this model object. 
+
+A model object of class `lam` (linear autonomous model) is a dynamical system of the form
+$$
+\frac{dx}{dt} = \dot{x} = u + \mathbf{B}
+$$
+where $x$ is a vector of carbon contents in $n$ compartments, $u$ is a vector of
+carbon inputs to the system, and $\mathbf{B}$ is a compartmental matrix with the 
+rates of cycling in the diagonal, and rates of transfers among compartments in the
+off-diagonals. The equilibrium solution of this system is given by
+$$
+x_{eq} = - \mathbf{B} \cdot u
+$$
+In `porce`, the equilibrium carbon stock of a `lam` model can be obtained 
+with the function `equilibriumStock`, which takes as only argument an object of 
+class `lam`.
+
+For example, we can build a `lam` model and compute equilibrium carbon stocks
+with the following code
+```{r}
+ATTOmodel <- lam(input=inputGPP(GPPmean), matrix=makeB(modpars[1,]))
+equilibriumStock(model=ATTOmodel)
+
+```
+
+The return value of `equilibriumStock` is a vector of size $n$ with the equilibrium
+values of each compartment. 
+
+Respiration rates for a linear autonomous system can be obtained from the equation
+$$
+r = -1^T \cdot \mathbf{B} \cdot x_{eq}
+$$
+which is implemented in the function `equilibriumOutflux`. We assume here that the
+output flux from all compartments is in the form of respiration. This can be computed
+as
+```{r}
+equilibriumOutflux(model=ATTOmodel)
+```
+
+These computations are relatively simple to do and can be done for one particular
+simulation in a regular R session without the need of any package. However,
+to run the 1000 simulations combining random variates of GPP and prior parameter
+values, we would need some help. Here is where the functionality of `porce` and
+`parallel` become useful. We can run all 1000 simulations very easy adopting a
+functional programming approach, in which we run functions inside functions 
+to create models and compute specific output, taking as input the entire set of 
+values of GPP and model parameters. 
+
+We create first a function with these characteristics
+```{r}
+pars2stocks<-function(gpp, pars){
+  mod<-lam(input=inputGPP(gpp), matrix=makeB(pars))
+  equilibriumStock(model=mod)
+}
+
+```
+
+Function `pars2stocks` takes parameter values of a model, in this case values of
+GPP and the parameters needed to build a compartmental matrix, and returns equilibrium
+carbon stocks. Notice that we are calling functions `inputGPP` and `makeB` inside
+function `lam`, following a functional approach. 
+
+We want to run the function `pars2stocks` 1000 times, and therefore we need
+to use all possible cores available in our computer to run these simulations. 
+Each core needs to recognize all objects and functions that we will send them, 
+and we use the following code for this purpose
+
+```{r}
+allObjects=ls()
+clusterExport(cl, varlist=c(allObjects, "lam", "inputGPP", "makeB", "equilibriumStock", "equilibriumOutflux"))
+
+```
+
+We now run the 1000 simulations using function `clusterMap` from `parallel`. It
+takes the function `pars2stocks`, the entire vector of GPP variates, and the entire
+`modpars` dataset, which needs to be split by row for each set of parameter values
+using function `asplit`. The return of `clusterMap` is a list of vectors with the
+equilibrium carbon stocks, which for convenience we can `unlist` and save them in a matrix.
+
+```{r}
+stockList<-clusterMap(cl, fun=pars2stocks, gpp=atto_gpp, pars=asplit(modpars, MARGIN = 1))
+stocksATTO<-matrix(unlist(stockList), nrow=7, ncol=1000)
+```
+
+The results can be ploted with a boxplot to better observe the predicted variability
+in carbon stocks. 
+
+```{r, fig.dim = c(7, 10)}
+boxplot(stocksATTO, use.cols = FALSE, range=0, horizontal=TRUE, names=pool_names, 
+        xlab=expression(paste("Carbon stock (Mg C h", a^-1, ")")))
+```
+
+A similar procedure is done for the respiration flux
+
+```{r, fig.dim = c(7, 10)}
+pars2resp<-function(gpp, pars){
+  mod<-lam(input=inputGPP(gpp), matrix=makeB(pars))
+  equilibriumOutflux(model=mod)
+}
+
+respList<-clusterMap(cl, fun=pars2resp, gpp=atto_gpp, pars=asplit(modpars, MARGIN = 1))
+respATTO<-matrix(unlist(respList), nrow=7, ncol=1000)
+
+boxplot(respATTO, use.cols = FALSE, range=0, horizontal=TRUE, names=pool_names, 
+        xlab=expression(paste("Respiration (Mg C h", a^-1, " y", r^-1, ")")))
+
+```
+
+## Aggregated variables and visualizations
+In many cases it is useful to combine stocks and fluxes to produce particularly
+relevant simulation output. For the carbon stocks, the results can be aggregated
+as aboveground biomass C (foliage + wood), belowground biomass C (fine and coarse roots),
+and necromass C (fine litter and coarse woody debris).
+
+```{r, fig.dim = c(8, 6)}
+abvg_pools<-match(c("Foliage", "Wood"), table=pool_names)
+blwg_pools<-match(c("Fine roots", "Coarse roots"), table=pool_names)
+necromass_pools<-match(c("Fine litter", "CWD"), table=pool_names)
+
+abvg<-colSums(stocksATTO[abvg_pools,])
+blwg<-colSums(stocksATTO[blwg_pools,])
+necro<-colSums(stocksATTO[necromass_pools,])
+
+boxplot(list(abvg, blwg, necro), names=c("Aboveground biomass", "Belowground biomass", "Necromass"), ylim=c(0,300), range=0,
+        ylab=expression(paste("Carbon stocks (Mg C h", a^-1, ")")))
+
+```
+
+
+For respiration, we can aggregate results as autotrophic respiration, 
+heterotrophic respiration and total ecosystem respiration.
+
+```{r, fig.dim = c(8, 6)}
+autotroph_pools=match(c("Foliage", "Wood", "Fine roots", "Coarse roots"), table=pool_names)
+heterotroph_pools=match(c("Fine litter", "CWD", "Soil (0-30 cm)"), table=pool_names)
+
+Ra<-colSums(respATTO[autotroph_pools,])
+Rh<-colSums(respATTO[heterotroph_pools,])
+Re<-colSums(respATTO)
+
+boxplot(list(Ra,Rh,Re), names=c("Autotrophic", "Heterotrophic", "Ecosystem"), ylim=c(0,60), range=0,
+        ylab=expression(paste("Respiration (Mg C h", a^-1, " y", r^-1, ")")))
+
+```
+
+Given that the 1000 instances of the model represent uncertainty in model predictions,
+one could use this information to generate a random arrangement of cells as in
+spatial landscape of possible model predictions. This could be interpreted as 
+an idealized plot for the study site. As an example, we can aggregate all carbon
+stocks for this site into a plot of 20 x 50 cells.
+
+```{r}
+toc<-colSums(stocksATTO)
+image(x=1:50,y=1:20,z=matrix(toc,50,20), xlab="x coordinate", ylab="y coordinate")
+
+```
+
+However, care must be taken in not over interpreting this visualization. It is
+simply a way to organize the different predictions in some spatial way, but it 
+has no ecological meaning. The point is simply that `porce` could be used for 
+spatial predictions if a spatial distribution of input variables is known.
+
+## Radiocarbon dynamics
+To simulate radiocarbon dynamics, we need now to use package `SoilR` to produce
+time-dependent simulations of radiocarbon in ecosystem pools. For this purpose,
+we need a dataset of atmospheric radiocarbon values covering the entire
+bomb-radiocarbon period until a recent year. `SoilR` already contains atmospheric
+radiocarbon data from @Hua2021 that can be extended to more recent years using the 
+procedure described in @Sierra2018RC. The forecast series is available in the
+`input` folder in this repository, and we can bind both curves as
+
+```{r, fig.dim = c(8, 6)}
+fNHZ3<-read.csv(file="inputs/NHZ3forecast.csv")
+NHZ3<-data.frame(Year=c(Hua2021$NHZone3[-(937:939),1], fNHZ3$time),
+                 Delta14C=c(Hua2021$NHZone3[-(937:939),2],Delta14C_from_AbsoluteFractionModern(fNHZ3$F14C)))
+
+years<-seq(1942,2029, by=1/12)
+C14Model<-Model_14(t=years,inputFluxes = inputGPP(GPPmean),A=makeB(modpars[1,]), ivList=stocksATTO[,1],
+                   inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
+                   initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
+C14t<-getF14(C14Model)
+
+plot(NHZ3, type="l", col=1, lwd=2, ylab=expression(paste(Delta^14, "C (per mil)")), bty="n")
+matlines(years, C14t, lty=1, col=rainbow(n=7))
+legend("topright", c("Atmosphere",pool_names), col=c(1, rainbow(n=7)), lty=1, lwd=c(2,rep(1,7)), bty="n")
+
+```
+
+A similar computation can be performed for the radiocarbon signature in the respiration
+of the entire ecosystem, which combines the signature of all the compartments 
+weighed by their contributions to the total respiration flux
+
+```{r, fig.dim = c(8, 6)}
+R14t<-getF14R(C14Model)
+
+plot(NHZ3, type="l", col=1, lwd=2, ylab=expression(paste(Delta^14, "C (per mil)")), bty="n")
+lines(years,R14t, col=2)
+legend("topright", c("Atmosphere", "Respired CO2"), lty=1, col=1:2, bty="n")
+```
+
+## Expected radiocarbon values in respiration for a target year
+Considering the fact that there is uncertainty in the GPP values and in the
+parameter values of the model, it is useful to produce uncertainties for the expected
+radiocarbon values. In particular, if one has data from a specific year, it is 
+possible to predict radiocarbon values for that target year. 
+
+For this purpose, we create a new function that takes as arguments model parameter
+values, builds a `SoilR` model and extracts the radiocarbon value for the 
+target year.
+
+```{r}
+R14_ty<-function(gpp, pars, targetYear=2019.5){
+  Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
+                inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
+                initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
+  R14<-getF14R(Mod)
+  R14[years==targetYear]
+}
+
+```
+
+In this case, we will produce an example for mid 2019, because we actually have
+some measured data for this particular year.
+
+Initializing a cluster and running the simulations for the entire set of 1000 
+values of GPP and parameter values, we can recover the radiocarbon values in
+ecosystem respiration for year 2019.5 (June 2019). Given that the model needs
+to run computations for a time series since 1940, it takes about one minute to run 
+these computations. 
+
+```{r}
+allObjects=ls()
+clusterExport(cl, varlist=c(allObjects, "getF14R", "ConstFc", "Model_14", "BoundFc", "inputGPP", "makeB"))
+ER14<-clusterMap(cl,fun=R14_ty, gpp=atto_gpp, pars=asplit(x=modpars, MARGIN=1))
+ER14_2019<-unlist(ER14)
+```
+
+Plotting the results, we can see
+
+```{r}
+hist(ER14_2019, freq=FALSE, main="", xlab=expression(paste(Delta^14, "C (\u2030)")))
+```
+
+These results show that it is likely to obtain radiocarbon values in ecosystem
+respiration in the range: `r range(ER14_2019)`, with a mean value of `r mean(ER14_2019)`
+and a median of `r median(ER14_2019)`.
+
+
+## References
+
