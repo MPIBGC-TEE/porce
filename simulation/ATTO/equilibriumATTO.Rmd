@@ -368,7 +368,7 @@ values, builds a `SoilR` model and extracts the radiocarbon value for the
 target year.
 
 ```{r}
-years<-seq(1942,2029, by=1/2)
+years<-seq(1942,2020, by=1/2) # Make the simulations shorter in time
 R14_ty<-function(gpp, pars, targetYear=2019.5){
   Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
                 inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
@@ -404,6 +404,26 @@ hist(ER14_2019, freq=FALSE, main="", xlab=expression(paste(Delta^14, "C (\u2030)
 These results show that it is likely to obtain radiocarbon values in ecosystem
 respiration in the range: `r round(range(ER14_2019), 3)` per mil, with a mean value of `r round(mean(ER14_2019), 3)` per mil
 and a median of `r round(median(ER14_2019), 3)` per mil.
+
+In addition, we can produce predictions of the radiocarbon content of the different compartments
+for a target year, which again, can be very useful to compare with observed data.
+
+```{r, fig.dim = c(10, 6)}
+C14_ty<-function(gpp, pars, targetYear=2019.5){
+  Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
+                inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
+                initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
+  C14<-getF14(Mod)
+  C14[years==targetYear]
+}
+
+clusterExport(cl, varlist=c(allObjects, "getF14R", "ConstFc", "Model_14", "BoundFc", "inputGPP", "makeB", "getF14"))
+RS<-clusterMap(cl,fun=C14_ty, gpp=atto_gpp, pars=asplit(x=modpars, MARGIN=1))
+radiocarbonStocks<-matrix(unlist(RS), ncol=7, nrow=1000, byrow = TRUE)
+boxplot(radiocarbonStocks, names=pool_names, range=0, ylab=expression(paste(Delta^14, "C (\u2030)")))
+
+```
+
 
 
 ## References

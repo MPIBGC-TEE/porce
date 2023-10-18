@@ -82,3 +82,46 @@ R14t<-getF14R(C14Model)
 plot(NHZ3, type="l", col=1, lwd=2, ylab=expression(paste(Delta^14, "C (per mil)")), bty="n")
 lines(years,R14t, col=2)
 legend("topright", c("Atmosphere", "Respired CO2"), lty=1, col=1:2, bty="n")
+
+
+R14_ty<-function(gpp, pars, targetYear=2019.5){
+  Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
+                inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
+                initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
+  R14<-getF14R(Mod)
+  R14[years==targetYear]
+}
+
+
+R14_ty(gpp=atto_gpp[1], pars=modpars[1,])
+
+allObjects=ls()
+clusterExport(cl, varlist=c(allObjects, "getF14R", "ConstFc", "Model_14", "BoundFc", "inputGPP", "makeB"))
+
+ER14<-mapply(FUN=R14_ty, gpp=atto_gpp[1:3], pars=asplit(x=modpars[1:3,], MARGIN=1))
+
+ER14<-clusterMap(cl,fun=R14_ty, gpp=atto_gpp, pars=asplit(x=modpars, MARGIN=1))
+
+ER14_2019<-unlist(ER14)
+
+pdf("Expected14CO2.pdf", encoding = 'WinAnsi.enc')
+hist(ER14_2019, freq=FALSE, main="", xlab=expression(paste(Delta^14, "C (\u2030)")))
+dev.off()
+
+mean(ER14_2019)
+median(ER14_2019)
+range(ER14_2019)
+
+
+C14_ty<-function(gpp, pars, targetYear=2019.5){
+  Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
+                inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
+                initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
+  C14<-getF14(Mod)
+  C14[years==targetYear]
+}
+
+clusterExport(cl, varlist=c(allObjects, "getF14R", "ConstFc", "Model_14", "BoundFc", "inputGPP", "makeB", "getF14"))
+RS<-clusterMap(cl,fun=C14_ty, gpp=atto_gpp, pars=asplit(x=modpars, MARGIN=1))
+radiocarbonStocks<-matrix(unlist(RS), ncol=7, nrow=1000, byrow = TRUE)
+boxplot(radiocarbonStocks, names=pool_names, range=0, ylab=expression(paste(Delta^14, "C (\u2030)")))
