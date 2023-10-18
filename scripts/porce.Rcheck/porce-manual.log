@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.27)  16 OCT 2023 15:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.27)  18 OCT 2023 09:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -354,8 +354,8 @@ File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count290
 \l__pdf_internal_box=\box58
 )
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.aux)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.aux)
 \openout1 = `Rd2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -393,10 +393,10 @@ LaTeX Font Info:    ... okay on input line 8.
 )
 Package hyperref Info: Link coloring ON on input line 8.
 
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.out)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.out)
 \@outlinefile=\write4
 \openout4 = `Rd2.out'.
 
@@ -432,8 +432,8 @@ LaTeX Font Info:    Trying to load font information for T1+phv on input line 34
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.toc)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.toc)
 \tf@toc=\write5
 \openout5 = `Rd2.toc'.
 
@@ -447,8 +447,8 @@ LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
 (Font)              scaled to size 9.0pt on input line 105.
 
 [2] [3]
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.ind [4]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.ind [4]
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
 (Font)              using `T1/zi4/m/n' instead on input line 17.
@@ -457,8 +457,8 @@ LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
 
 
 ])
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmp9gFsWx/Rd2pdf3111
-20936b30/Rd2.aux)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
+1b92567/Rd2.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -467,7 +467,7 @@ Package rerunfilecheck Info: File `Rd2.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  10418 strings out of 476025
- 161883 string characters out of 5790017
+ 161870 string characters out of 5790017
  1863388 words of memory out of 5000000
  30634 multiletter control sequences out of 15000+600000
  548730 words of font info for 76 fonts, out of 8000000 for 9000
