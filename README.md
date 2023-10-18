@@ -19,5 +19,5 @@ The package is not yet in CRAN.
 
 ## Documentation
 Function documentation can be found directly in the R package. 
-For getting started and see some of the functionality, you can explore the folder simulations/ATTO/ where there is an RMarkdown document with a comprehensive analysis applying `porce` to a field site. 
+For getting started and see some of the functionality, you can explore the [simulation example for the ATTO site](http://htmlpreview.github.io/?https://github.com/MPIBGC-TEE/porce/blob/main/simulation/ATTO/equilibriumATTO.html) with a comprehensive analysis applying `porce` to a field site. 
 

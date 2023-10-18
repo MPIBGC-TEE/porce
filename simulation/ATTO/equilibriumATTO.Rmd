@@ -94,7 +94,8 @@ in a quasy-equilibrium, without long-term trends but with some seasonal dynamics
 ```{r}
 matplot(as.Date(monthly_gpp[,1]), monthly_gpp[,-1]* 1e-06 * 1e04 *12, type="l", 
         lty=1, col=1:3, ylab=expression(paste("GPP (MgC h", a^-1, " y", r^-1,")")), xlab="Calendar year",
-        ylim=c(0,50), bty="n")
+        ylim=c(0,60), bty="n")
+legend("topright", c("u*5", "u*50", "u*95"), lty=1, col=1:3, bty="n")
 ```
 
 Because we are interested in simulating the uncertainty in GPP assuming the system
@@ -261,7 +262,7 @@ boxplot(respATTO, use.cols = FALSE, range=0, horizontal=TRUE, names=pool_names,
 ## Aggregated variables and visualizations
 In many cases it is useful to combine stocks and fluxes to produce particularly
 relevant simulation output. For the carbon stocks, the results can be aggregated
-as aboveground biomass C (foliage + wood), belowground biomass C (fine and coarse roots),
+as aboveground biomass C (foliage and wood), belowground biomass C (fine and coarse roots),
 and necromass C (fine litter and coarse woody debris).
 
 ```{r, fig.dim = c(8, 6)}
@@ -319,13 +320,19 @@ we need a dataset of atmospheric radiocarbon values covering the entire
 bomb-radiocarbon period until a recent year. `SoilR` already contains atmospheric
 radiocarbon data from @Hua2021 that can be extended to more recent years using the 
 procedure described in @Sierra2018RC. The forecast series is available in the
-`input` folder in this repository, and we can bind both curves as
+`inputs` folder in this repository, and we can bind both curves as
 
-```{r, fig.dim = c(8, 6)}
+```{r}
 fNHZ3<-read.csv(file="inputs/NHZ3forecast.csv")
 NHZ3<-data.frame(Year=c(Hua2021$NHZone3[-(937:939),1], fNHZ3$time),
                  Delta14C=c(Hua2021$NHZone3[-(937:939),2],Delta14C_from_AbsoluteFractionModern(fNHZ3$F14C)))
+```
 
+Then, we build a `Model_14` object following the regular procedure from the `SoilR` package. This needs a 
+vector of time points, initial values for the stocks and their radiocarbon content, and the
+information related to the compartmental system, i.e. an input vector and a compartmental matrix. 
+
+```{r, fig.dim = c(8, 6)}
 years<-seq(1942,2029, by=1/12)
 C14Model<-Model_14(t=years,inputFluxes = inputGPP(GPPmean),A=makeB(modpars[1,]), ivList=stocksATTO[,1],
                    inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
@@ -361,6 +368,7 @@ values, builds a `SoilR` model and extracts the radiocarbon value for the
 target year.
 
 ```{r}
+years<-seq(1942,2029, by=1/2)
 R14_ty<-function(gpp, pars, targetYear=2019.5){
   Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
                 inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
@@ -394,8 +402,8 @@ hist(ER14_2019, freq=FALSE, main="", xlab=expression(paste(Delta^14, "C (\u2030)
 ```
 
 These results show that it is likely to obtain radiocarbon values in ecosystem
-respiration in the range: `r range(ER14_2019)`, with a mean value of `r mean(ER14_2019)`
-and a median of `r median(ER14_2019)`.
+respiration in the range: `r round(range(ER14_2019), 3)` per mil, with a mean value of `r round(mean(ER14_2019), 3)` per mil
+and a median of `r round(median(ER14_2019), 3)` per mil.
 
 
 ## References
