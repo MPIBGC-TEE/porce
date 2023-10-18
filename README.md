@@ -10,10 +10,14 @@ impulse response function.
 
 ## Installation
 Porce is an R package and can be installed directly from this GitHub repository
-```{r}
+```r
 install.packages("devtools")
 devtools::install_github('MPIBGC-TEE/porce/pkg')
 ```
 
 The package is not yet in CRAN.
+
+## Documentation
+Function documentation can be found directly in the R package. 
+For getting started and see some of the functionality, you can explore the folder simulations/ATTO/ where there is an RMarkdown document with a comprehensive analysis applying `porce` to a field site. 
 
