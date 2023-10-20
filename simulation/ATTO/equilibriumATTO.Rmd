@@ -296,6 +296,25 @@ boxplot(list(Ra,Rh,Re), names=c("Autotrophic", "Heterotrophic", "Ecosystem"), yl
 
 ```
 
+Net primary production (NPP) can be obtained as the difference between 
+gross primary production and autotrophic respiration. Similarly, the ratio of
+NPP:GPP, which is often called carbon use efficiency, can be computed from these simulation results.
+
+```{r}
+npp<-atto_gpp-Ra
+NG<-npp/atto_gpp
+
+par(mfrow=c(2,1), mar=c(4,4,1,1))
+hist(npp, main="", xlab=expression(paste("Net primiary production NPP (Mg C h", a^-1, " y", r^-1, ")")))
+hist(NG, main="", xlab="NPP:GPP")
+par(mfrow=c(1,1))
+```
+
+The ratio NPP:GPP should be interpreted as the proportion of GPP that is respired by 
+heterotrophic organisms, which on average is `r round(mean(NG),2)`. This implies that from
+the total amount of GPP, `r round(mean(NG),2)*100` % is on average respired by heterotrophic 
+organisms, and `r (1-round(mean(NG),2))*100`% is respired by autotrophic organisms. 
+
 Given that the 1000 instances of the model represent uncertainty in model predictions,
 one could use this information to generate a random arrangement of cells as in
 spatial landscape of possible model predictions. This could be interpreted as 

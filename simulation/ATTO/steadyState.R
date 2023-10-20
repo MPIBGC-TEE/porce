@@ -49,6 +49,10 @@ respATTO<-matrix(unlist(respList), nrow=7, ncol=1000)
 boxplot(respATTO, use.cols = FALSE, range=0, horizontal=TRUE, names=pool_names, 
         xlab=expression(paste("Respiration (Mg C h", a^-1, " y", r^-1, ")")))
 
+abvg_pools<-match(c("Foliage", "Wood"), table=pool_names)
+blwg_pools<-match(c("Fine roots", "Coarse roots"), table=pool_names)
+necromass_pools<-match(c("Fine litter", "CWD"), table=pool_names)
+
 abvg<-colSums(stocksATTO[abvg_pools,])
 blwg<-colSums(stocksATTO[blwg_pools,])
 necro<-colSums(stocksATTO[necromass_pools,])
@@ -57,6 +61,26 @@ boxplot(list(abvg, blwg, necro), names=c("Aboveground C", "Belowground C", "Necr
         ylab=expression(paste("Respiration (Mg C h", a^-1, ")")))
 
 toc<-colSums(stocksATTO)
+
+autotroph_pools=match(c("Foliage", "Wood", "Fine roots", "Coarse roots"), table=pool_names)
+heterotroph_pools=match(c("Fine litter", "CWD", "Soil (0-30 cm)"), table=pool_names)
+
+Ra<-colSums(respATTO[autotroph_pools,])
+Rh<-colSums(respATTO[heterotroph_pools,])
+Re<-colSums(respATTO)
+
+boxplot(list(Ra,Rh,Re), names=c("Autotrophic", "Heterotrophic", "Ecosystem"), ylim=c(0,60), range=0,
+        ylab=expression(paste("Respiration (Mg C h", a^-1, " y", r^-1, ")")))
+
+
+npp<-atto_gpp-Ra
+NG<-npp/atto_gpp
+
+par(mfrow=c(2,1), mar=c(4,4,1,1))
+hist(npp, main="", xlab=expression(paste("Net primiary production NPP (Mg C h", a^-1, " y", r^-1, ")")))
+hist(NG, main="", xlab="NPP:GPP")
+par(mfrow=c(1,1))
+
 
 image(x=1:50,y=1:20,z=matrix(toc,50,20), xlab="x coordinate", ylab="y coordinate")
 
