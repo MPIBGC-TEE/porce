@@ -1,6 +1,10 @@
+convolutionfun	convolutionfun
+EmanuelModel	EmanuelModel
 equilibriumOutflux	equilibriumOutflux
 equilibriumStock	equilibriumStock
+erf	erf
 inputGPP	inputGPP
+irf	irf
 lam	lam-class
 lam-class	lam-class
 makeB	makeB

@@ -25,6 +25,77 @@ Type 'q()' to quit R.
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
 > cleanEx()
+> nameEx("EmanuelModel")
+> ### * EmanuelModel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EmanuelModel
+> ### Title: Terrestrial carbon model of Emanuel
+> ### Aliases: EmanuelModel
+> 
+> ### ** Examples
+> 
+> EmanuelModel()
+An object of class "lam"
+Slot "input":
+[1] 77  0 36  0  0
+
+Slot "matrix":
+           [,1]         [,2]        [,3]        [,4]       [,5]
+[1,] -2.0810811  0.000000000  0.00000000  0.00000000  0.0000000
+[2,]  0.8378378 -0.068584071  0.00000000  0.00000000  0.0000000
+[3,]  0.0000000  0.000000000 -0.52173913  0.00000000  0.0000000
+[4,]  0.5675676  0.033185841  0.17391304 -0.59259259  0.0000000
+[5,]  0.0000000  0.004424779  0.08695652  0.03703704 -0.0102587
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("convolutionfun")
+> ### * convolutionfun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: convolutionfun
+> ### Title: Convolution function
+> ### Aliases: convolutionfun
+> 
+> ### ** Examples
+> 
+> tms<-seq(0,10, by=0.1)
+> cosconvfun<-convolutionfun(f=cos, g=cos) # convolve cosine function with itself
+> solfun<-function(t){ (t*cos(t) + sin(t))/2} # analytical solution (Braun 1993, Dif Eq and App, Springer, p. 254)
+> x1<-sapply(X=tms, FUN=cosconvfun)
+> x2<-sapply(X=tms, FUN=solfun)
+> 
+> plot(tms, x1, type="l")
+> lines(tms, x2, col=2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("erf")
+> ### * erf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: erf
+> ### Title: Equilibrium response function
+> ### Aliases: erf
+> 
+> ### ** Examples
+> 
+> EmanuelERF<-erf(model=EmanuelModel())
+> tms<-seq(0,100)
+> em<-sapply(tms, EmanuelERF)
+> plot(tms, em, type="l")
+> 
+> 
+> 
+> 
+> cleanEx()
 > nameEx("inputGPP")
 > ### * inputGPP
 > 
@@ -38,6 +109,26 @@ Type 'q()' to quit R.
 > 
 > inputGPP(25, 7)
 [1] 25  0  0  0  0  0  0
+> 
+> 
+> 
+> cleanEx()
+> nameEx("irf")
+> ### * irf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: irf
+> ### Title: Impulse response function
+> ### Aliases: irf
+> 
+> ### ** Examples
+> 
+> EmanuelIRF<-irf(model=EmanuelModel())
+> tms<-seq(0,100)
+> em<-sapply(tms, EmanuelIRF)
+> plot(tms, em, type="l")
+> 
 > 
 > 
 > 
@@ -95,7 +186,7 @@ Type 'q()' to quit R.
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.069 0.007 0.079 0 0 
+Time elapsed:  0.761 0.051 0.812 0 0 
 > grDevices::dev.off()
 null device 
           1 

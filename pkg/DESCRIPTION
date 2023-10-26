@@ -7,7 +7,7 @@ Authors@R:
 Description: Set of functions, classes and methods to model carbon and radiocarbon dynamics in ecosystems.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Imports: methods
+Imports: methods, expm
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3.9000

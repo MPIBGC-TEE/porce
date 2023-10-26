@@ -1,8 +1,12 @@
+EmanuelModel            Terrestrial carbon model of Emanuel
+convolutionfun          Convolution function
 equilibriumOutflux      Equilibrium output flux for a linear autonomous
                         model
 equilibriumStock        Equilibrium stocks for a linear autonomous
                         model
+erf                     Equilibrium response function
 inputGPP                Input vector from a scalar gpp value
+irf                     Impulse response function
 lam-class               Linear autonomous model
 makeB                   Compartmental matrix from a set of prior
                         parameters of Porce model

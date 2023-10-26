@@ -1,5 +1,5 @@
 Hmm ... looks like a package
-Converting parsed Rd's to LaTeX 
+Converting parsed Rd's to LaTeX .
 Creating pdf output from LaTeX ...
 
 This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex)
@@ -82,28 +82,34 @@ No file Rd2.aux.
 No file Rd2.toc.
 [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/20
-23/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}] [2] [3]
+23/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+Overfull \hbox (86.23488pt too wide) in paragraph at lines 69--69
+ []\T1/zi4/m/n/9 solfun<-function(t){ (t*cos(t) + sin(t))/2} # analytical solut
+ion (Braun 1993, Dif Eq and App, Springer, p. 254)[] 
+[2] [3] [4] [5]
 No file Rd2.ind.
-[4]
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.aux)
+[6]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
 (rerunfilecheck)                or use package `bookmark'.
 
- )</usr/local/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
-a-zi4r.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.
-pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/
-local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texl
-ive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/t
-exmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (4 pages, 80421 bytes).
+ )
+(see the transcript file for additional information)</usr/local/texlive/2023/te
+xmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texliv
+e/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/
+texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2023/texmf-dist
+/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/typ
+e1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/tim
+es/utmri8a.pfb>
+Output written on Rd2.pdf (6 pages, 87608 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.17 [TeX Live 2023] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (8 entries accepted, 0 rejected).
-Sorting entries....done (30 comparisons).
-Generating output file Rd2.ind....done (25 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (12 entries accepted, 0 rejected).
+Sorting entries....done (50 comparisons).
+Generating output file Rd2.ind....done (32 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex)
@@ -175,34 +181,37 @@ ty (/usr/local/texlive/2023/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
 Writing index file Rd2.idx
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.aux)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.aux)
 (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 )
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.out)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.out)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/jknapltx/ursfs.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.toc) [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/p
-dftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr
-/local/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
-[2] [3]
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.ind [4]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.toc) [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}{/us
+r/local/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+Overfull \hbox (86.23488pt too wide) in paragraph at lines 69--69
+ []\T1/zi4/m/n/9 solfun<-function(t){ (t*cos(t) + sin(t))/2} # analytical solut
+ion (Braun 1993, Dif Eq and App, Springer, p. 254)[] 
+[2] [3] [4] [5]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.ind [6]
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 17.
+(Font)              using `T1/zi4/m/n' instead on input line 24.
 
-[5])
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.aux)
+[7])
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -211,19 +220,21 @@ Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
 (rerunfilecheck)                or use package `bookmark'.
 
- )</usr/local/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
-a-zi4r.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.p
-fb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/l
-ocal/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texli
-ve/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/te
-xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (5 pages, 91031 bytes).
+ )
+(see the transcript file for additional information)</usr/local/texlive/2023/te
+xmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texliv
+e/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
+/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2023/texmf-dist/
+fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type
+1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/time
+s/utmri8a.pfb>
+Output written on Rd2.pdf (7 pages, 98215 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.17 [TeX Live 2023] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (8 entries accepted, 0 rejected).
-Sorting entries....done (30 comparisons).
-Generating output file Rd2.ind....done (25 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (12 entries accepted, 0 rejected).
+Sorting entries....done (50 comparisons).
+Generating output file Rd2.ind....done (32 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex)
@@ -295,46 +306,51 @@ ty (/usr/local/texlive/2023/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
 Writing index file Rd2.idx
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.aux)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.aux)
 (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 )
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.out)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.out)
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.out)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/jknapltx/ursfs.fd)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.toc) [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/p
-dftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr
-/local/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
-[2] [3]
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.ind [4]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.toc) [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}{/us
+r/local/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+Overfull \hbox (86.23488pt too wide) in paragraph at lines 69--69
+ []\T1/zi4/m/n/9 solfun<-function(t){ (t*cos(t) + sin(t))/2} # analytical solut
+ion (Braun 1993, Dif Eq and App, Springer, p. 254)[] 
+[2] [3] [4] [5]
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.ind [6]
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 17.
+(Font)              using `T1/zi4/m/n' instead on input line 24.
 
-[5])
-(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/RtmpA85PnD/Rd2pdf60e9
-1b92567/Rd2.aux)
+[7])
+(/private/var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T/Rtmpfdt1vK/Rd2pdf15d4
+7956b362/Rd2.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
- )</usr/local/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
-a-zi4r.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.p
-fb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/l
-ocal/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texli
-ve/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/te
-xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (5 pages, 91330 bytes).
+ )
+(see the transcript file for additional information)</usr/local/texlive/2023/te
+xmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/texliv
+e/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
+/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2023/texmf-dist/
+fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type
+1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/time
+s/utmri8a.pfb>
+Output written on Rd2.pdf (7 pages, 98377 bytes).
 Transcript written on Rd2.log.
 Saving output to ‘porce-manual.pdf’ ...
 Done
-You may want to clean up by 'rm -Rf /var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T//RtmpA85PnD/Rd2pdf60e91b92567'
+You may want to clean up by 'rm -Rf /var/folders/ww/ms12h31127j_k8ml9ybjch680000gq/T//Rtmpfdt1vK/Rd2pdf15d47956b362'

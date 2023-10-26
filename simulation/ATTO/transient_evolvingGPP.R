@@ -92,3 +92,6 @@ legend("topright", c("Gross primary production", "Ecosystem respiration",
 pal<-rainbow(7)
 matplot(years,Rt, type="l", lty=1, ylim=c(0,200), col=pal, bty="n")
 legend("topright", legend = pool_names, col=pal, lty=1, bty="n")
+
+#' ## Computations based on a transfer (impulse response) function
+#' We compute now ecosystem respiration based on the convolution of an impulse response function
