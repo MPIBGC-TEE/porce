@@ -19,5 +19,5 @@ erf<-function(model){
   B<-model@matrix
   z<- -1 * colSums(B)
   x<- -1*solve(B)%*%u
-  function(t) z%*%expm(t*B)%*%(x/sum(x))
+  function(t) as.numeric(z%*%expm((t*B))%*%(x/sum(x)))
 }

@@ -18,5 +18,5 @@ irf<-function(model){
   u<-model@input/sum(model@input)
   B<-model@matrix
   z<- -1 * colSums(B)
-  function(t) z%*%expm(t*B)%*%u
+  function(t) as.numeric(z%*%expm((t*B))%*%u)
 }

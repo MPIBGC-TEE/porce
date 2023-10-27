@@ -10,6 +10,7 @@
 #' 
 #' To get started we first call necessary libraries and data
 
+#+ message=FALSE
 library(porce)
 library(forecast)
 library(SoilR)
@@ -29,6 +30,7 @@ gpp_forecast<-lapply(gpp_ets, FUN=forecast, h=ny*freq)
 gpp_sim<-sapply(gpp_forecast, function(x) x$mean)
 
 #' We can see now the mean forecast, which can be used as toy series to run simulations.
+#+ fig.width=10, fig.height=8
 years<-seq(1/freq, ny, by=1/freq)
 matplot(years, gpp_sim, type="l", lty=1, col=1:3, bty="n")
 
@@ -47,6 +49,7 @@ Rt<-getReleaseFlux(mod)
 autotroph_pools=match(c("Foliage", "Wood", "Fine roots", "Coarse roots"), table=pool_names)
 heterotroph_pools=match(c("Fine litter", "CWD", "Soil (0-30 cm)"), table=pool_names)
 
+#+ fig.width=10, fig.height=8
 plot(years, rowSums(Rt), type="l", ylab=expression(paste("Flux (Mg C h", a^-1, " y", r^-1, ")")), ylim=c(0,400), col=2, bty="n")
 lines(years, gpp_sim[,1], col=3)
 lines(years, rowSums(Rt[,autotroph_pools]),col=4)
@@ -81,6 +84,7 @@ meanHR<-apply(X=HetResp, MARGIN=1, FUN=mean)
 sdHR<-apply(X=HetResp, MARGIN=1, FUN=sd)
 
 #' Here are the results presented as uncertainty in respiration given uncertainty in parameters
+#+ fig.width=10, fig.height=8
 plot(years, gpp_sim[,1], type="l", ylab=expression(paste("Flux (Mg C h", a^-1, " y", r^-1, ")")), ylim=c(0,400), col=3, bty="n")
 polygon(x=c(years,rev(years)), y=c(meanER+sdER, rev(meanER-sdER)), col=2, border=NA)
 polygon(x=c(years,rev(years)), y=c(meanAR+sdAR, rev(meanAR-sdAR)), col=4, border=NA)
@@ -89,9 +93,11 @@ lines(years, gpp_sim[,1], col=3)
 legend("topright", c("Gross primary production", "Ecosystem respiration",
                      "Autotrophic respiration", "Heterotrophic respiration"), lty=1, col=c(3,2,4,5),bty="n")
 
+#' We can also observe the dynamics of respiration for individual pools. 
+#' For convenience, the plot below is only for one simulation run. 
+
+#+ fig.width=10, fig.height=8
 pal<-rainbow(7)
 matplot(years,Rt, type="l", lty=1, ylim=c(0,200), col=pal, bty="n")
 legend("topright", legend = pool_names, col=pal, lty=1, bty="n")
 
-#' ## Computations based on a transfer (impulse response) function
-#' We compute now ecosystem respiration based on the convolution of an impulse response function
