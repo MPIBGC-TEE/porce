@@ -22,7 +22,7 @@
 #' plot(tms, x1, type="l")
 #' lines(tms, x2, col=2)
 
-convolutionfun=function(t, t0, f, g){
-  function(t){integrate(function(u,t){f(t-u)*g(u)}, lower=t0, upper=t, t)$value}
+convolutionfun=function(t, t0=0, f, g){
+  function(t){integrate(function(u){f(t-u)*g(u)}, lower=t0, upper=t)$value}
 }
 
