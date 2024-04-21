@@ -1,11 +1,11 @@
 #' Convolution function
 #' 
-#' Computes the convolution function between two functions f and g. 
+#' Creates the convolution function between two functions f and g. 
 #' Instead of returning a numerical value, this function returns a function.
 #'
 #' @param t a vector of time points
 #' @param t0 initial time
-#' @param f a function to convolve
+#' @param f a function to convolve as f(t-u)
 #' @param g a function to convolve
 #'
 #' @return a convolution function between f and g
@@ -22,7 +22,7 @@
 #' plot(tms, x1, type="l")
 #' lines(tms, x2, col=2)
 
-convolutionfun=function(t, t0=0, f, g){
+convolutionfun=function(t, t0, f, g){
   function(t){integrate(function(u,t){f(t-u)*g(u)}, lower=t0, upper=t, t)$value}
 }
 

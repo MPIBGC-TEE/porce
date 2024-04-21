@@ -4,14 +4,14 @@
 \alias{convolutionfun}
 \title{Convolution function}
 \usage{
-convolutionfun(t, t0 = 0, f, g)
+convolutionfun(t, t0, f, g)
 }
 \arguments{
 \item{t}{a vector of time points}
 
 \item{t0}{initial time}
 
-\item{f}{a function to convolve}
+\item{f}{a function to convolve as f(t-u)}
 
 \item{g}{a function to convolve}
 }
@@ -19,7 +19,7 @@ convolutionfun(t, t0 = 0, f, g)
 a convolution function between f and g
 }
 \description{
-Computes the convolution function between two functions f and g.
+Creates the convolution function between two functions f and g.
 Instead of returning a numerical value, this function returns a function.
 }
 \examples{
