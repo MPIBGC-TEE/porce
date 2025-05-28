@@ -4,7 +4,7 @@
 \alias{convolutionfun}
 \title{Convolution function}
 \usage{
-convolutionfun(t, t0, f, g)
+convolutionfun(t, t0 = 0, f, g)
 }
 \arguments{
 \item{t}{a vector of time points}

@@ -2,21 +2,23 @@
 % Please edit documentation in R/makeB.R
 \name{makeB}
 \alias{makeB}
-\title{Compartmental matrix from a set of prior parameters of Porce model}
+\title{Compartmental matrix from a vector of named parameters}
 \usage{
 makeB(pars)
 }
 \arguments{
-\item{pars}{a numeric vector of 16 parameter values}
+\item{pars}{a numeric vector of appropriately named parameter values}
 }
 \value{
-A compartmental matrix of dimension 7
+A compartmental matrix
 }
 \description{
-This function builds a compartmental matrix of seven pools using a set of
-16 parameter values. It is mostly used to build a matrix from the parameter
-values stored in the modpars dataset.
+This function builds a compartmental matrix using a vector of
+parameter values. The parameter must be named using a name of the form "ki"
+for rates for compartment i, and transfer coefficients "alphaij" with j the
+number of the donor compartment and i the number of the receiver compartment.
 }
 \examples{
+names(modpars[1,])
 makeB(pars=modpars[1,])
 }
