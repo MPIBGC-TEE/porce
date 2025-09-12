@@ -162,7 +162,7 @@ carbon inputs to the system, and $\mathbf{B}$ is a compartmental matrix with the
 rates of cycling in the diagonal, and rates of transfers among compartments in the
 off-diagonals. The equilibrium solution of this system is given by
 $$
-x_{eq} = - \mathbf{B} \cdot u
+x_{eq} = - \mathbf{B}^{-1} \cdot u
 $$
 In `porce`, the equilibrium carbon stock of a `lam` model can be obtained 
 with the function `equilibriumStock`, which takes as only argument an object of 

@@ -39,6 +39,7 @@ library(RColorBrewer)
 pal=brewer.pal(7, "Set2")
 pal1<-rainbow(n=7, alpha=0.9)
 pal2<-rainbow(n=7, alpha=0.5)
+pal3<-hcl.colors(4, alpha=0.5)
 
 no_cores <- detectCores() - 2
 cl <- makeCluster(no_cores)
@@ -82,13 +83,13 @@ stocksATTO<-matrix(unlist(stockList), nrow=7, ncol=1000)
 
 #' Time depend simulations are run in SoilR using the `Model_14` model class. 
 #' In this case we are not interested in obtaining a time depend solution of the model,
-#' but only the predicted values in 2024, which will be used as initial conditions
+#' but only the predicted values in 2025, which will be used as initial conditions
 #' for the second step with the fertilization experiment. The function below
 #' returns the radiocarbon content in all pools for a target year, in this case 
-#' the year 2024.5. 
+#' the year 2025.5. 
 
-years<-seq(1942,2025, by=1/2) 
-C14_ty<-function(gpp, pars, targetYear=2024.5){
+years<-seq(1942,2026, by=1/2) 
+C14_ty<-function(gpp, pars, targetYear=2025.5){
   Mod<-Model_14(t=years,inputFluxes = inputGPP(gpp),A=makeB(pars), ivList=stocksATTO[,1],
                 inputFc=BoundFc(NHZ3, lag=0, format="Delta14C"), 
                 initialValF=ConstFc(c(-20, -25, -20, -25, -20, -30, -50), format="Delta14C"))
@@ -103,16 +104,16 @@ C14_ty<-function(gpp, pars, targetYear=2024.5){
 allObjects=ls()
 clusterExport(cl, varlist=c(allObjects, "getF14", "ConstFc", "Model_14", "BoundFc", "inputGPP", "makeB"))
 CS14<-clusterMap(cl,fun=C14_ty, gpp=atto_gpp, pars=asplit(x=modpars, MARGIN=1))
-CS14_2024<-matrix(unlist(CS14), ncol=7, nrow=1000, byrow=TRUE)
+CS14_2025<-matrix(unlist(CS14), ncol=7, nrow=1000, byrow=TRUE)
 
-mCS14<-apply(CS14_2024, MARGIN = 2, mean) # initial condition for experiment
+mCS14<-apply(CS14_2025, MARGIN = 2, mean) # initial condition for experiment
 
 #' ## Fertilization experiment
-#' We will run simulations from 2024 until 2034 at monthly time steps. The function
+#' We will run simulations from 2025 until 2034 at monthly time steps. The function
 #' below returns a constant value of radiocarbon of -1000 per mil for each
 #' time step assuming that all radiocarbon in the air is of fossil origin. 
 
-future<-seq(2024.5, 2034.5, by=1/12)
+future<-seq(2025.5, 2035.5, by=1/12)
 fAtmC14<-sapply(future, function(t) -1000 )
 
 #' The following function computes the radiocarbon response of the ecosystem
@@ -145,11 +146,11 @@ ctrlC14b<-sapply(ctrl, FUN=function(x) x$C14b)
 ctrlC14bsts<-data.frame(mean=apply(ctrlC14b, 1, mean), sd=apply(ctrlC14b, 1, sd))
 ctrlC14r<-sapply(ctrl, FUN=function(x) x$C14r)
 ctrlC14rsts<-data.frame(mean=apply(ctrlC14r, 1, mean), sd=apply(ctrlC14r, 1, sd))
-ctrlC14p<-array(unlist(lapply(ctrl, FUN=function(x) x$C14p)), dim=c(121, 7, 1000))
+ctrlC14p<-array(unlist(lapply(ctrl, FUN=function(x) x$C14p)), dim=c(length(future), 7, 1000))
 ctrlC14psts<-list(mean=apply(ctrlC14p, c(1,2), mean), sd=apply(ctrlC14p, c(1,2), sd))
-ctrlCt<-array(unlist(lapply(ctrl, FUN=function(x) x$Ct)), dim=c(121, 7, 1000))
+ctrlCt<-array(unlist(lapply(ctrl, FUN=function(x) x$Ct)), dim=c(length(future), 7, 1000))
 ctrlCtsts<-list(mean=apply(ctrlCt, c(1,2), mean), sd=apply(ctrlCt, c(1,2), sd))
-ctrlRt<-array(unlist(lapply(ctrl, FUN=function(x) x$Rt)), dim=c(121, 7, 1000))
+ctrlRt<-array(unlist(lapply(ctrl, FUN=function(x) x$Rt)), dim=c(length(future), 7, 1000))
 ctrlRtsts<-list(mean=apply(ctrlRt, c(1,2), mean), sd=apply(ctrlRt, c(1,2), sd))
 
 
@@ -159,11 +160,11 @@ dblC14b<-sapply(dbl, FUN=function(x) x$C14b)
 dblC14bsts<-data.frame(mean=apply(dblC14b, 1, mean), sd=apply(dblC14b, 1, sd))
 dblC14r<-sapply(dbl, FUN=function(x) x$C14r)
 dblC14rsts<-data.frame(mean=apply(dblC14r, 1, mean), sd=apply(dblC14r, 1, sd))
-dblC14p<-array(unlist(lapply(dbl, FUN=function(x) x$C14p)), dim=c(121, 7, 1000))
+dblC14p<-array(unlist(lapply(dbl, FUN=function(x) x$C14p)), dim=c(length(future), 7, 1000))
 dblC14psts<-list(mean=apply(dblC14p, c(1,2), mean), sd=apply(dblC14p, c(1,2), sd))
-dblCt<-array(unlist(lapply(dbl, FUN=function(x) x$Ct)), dim=c(121, 7, 1000))
+dblCt<-array(unlist(lapply(dbl, FUN=function(x) x$Ct)), dim=c(length(future), 7, 1000))
 dblCtsts<-list(mean=apply(dblCt, c(1,2), mean), sd=apply(dblCt, c(1,2), sd))
-dblRt<-array(unlist(lapply(dbl, FUN=function(x) x$Rt)), dim=c(121, 7, 1000))
+dblRt<-array(unlist(lapply(dbl, FUN=function(x) x$Rt)), dim=c(length(future), 7, 1000))
 dblRtsts<-list(mean=apply(dblRt, c(1,2), mean), sd=apply(dblRt, c(1,2), sd))
 
 pol<-function(x, df, cl){
@@ -181,14 +182,17 @@ pol<-function(x, df, cl){
 #' isotopic equilibration with the atmosphere. 
 
 #+ fig.width=10, fig.height=8
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/Fert14C.pdf", encoding = "WinAnsi.enc")
+par(mar=c(4,4.5,0,1))
 plot(NULL, type="l", xlab="Year AD", ylab=expression(paste(Delta^14, "C (\u2030)")), 
-     xlim=c(2024, 2034), ylim=c(-1000, 100), bty="n")
-pol(future, ctrlC14bsts, pal[1])
-pol(future, ctrlC14rsts, pal[2])
-pol(future, dblC14bsts, pal[3])
-pol(future, dblC14rsts, pal[4])
-legend("bottomleft", c("Control ecosystem radiocarbon", "Control respired radiocarbon",
-                       "Double ecosystem radiocarbon", "Double respired radiocarbon"), lty=1, lwd=4, col=pal, bty="n")
+     xlim=c(2025, 2035), ylim=c(-1000, 100), bty="n")
+pol(future, ctrlC14bsts, pal3[1])
+pol(future, ctrlC14rsts, pal3[2])
+pol(future, dblC14bsts, pal3[3])
+pol(future, dblC14rsts, pal3[4])
+legend("bottomleft", c("Control, ecosystem radiocarbon", "Control, respired radiocarbon",
+                       "+50%GPP, ecosystem radiocarbon", "+50%GPP, respired radiocarbon"), lty=1, lwd=4, col=pal3, bty="n")
+dev.off()
 
 #' The response of individual pools shows that fertilization with fossil carbon
 #' leads to faster incorporation of radiocarbon in all pools (lighter color). However,
@@ -196,30 +200,34 @@ legend("bottomleft", c("Control ecosystem radiocarbon", "Control respired radioc
 #' 
 
 #+ fig.width=10, fig.height=12
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/Pools14C.pdf", height=7*sqrt(2), encoding = "WinAnsi.enc")
 par(mfrow=c(4,2))
 for(i in 1:7){
   plot(NULL, type="l", xlab="Year AD", ylab=expression(paste(Delta^14, "C (\u2030)")), 
-       xlim=c(2024, 2034), ylim=c(-1000, 100), bty="n", main=pool_names[i])
+       xlim=c(2025, 2035), ylim=c(-1000, 100), bty="n", main=pool_names[i])
     pol(future, df=data.frame(mean=ctrlC14psts$mean[,i], sd=ctrlC14psts$sd[,i]), cl=pal1[i])
     pol(future, df=data.frame(mean=dblC14psts$mean[,i], sd=dblC14psts$sd[,i]), cl=pal2[i])
 
 }
 par(mfrow=c(1,1))
+dev.off()
 
 #' The response of individual pools in terms of C stocks also suggest a large
 #' degree of variability and responses due to fertilization are difficult to see,
 #' except for the carbon stock in foliage and in the fine litter pool. 
 
 #+ fig.width=10, fig.height=12
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/PoolsC.pdf", height=7*sqrt(2), encoding = "WinAnsi.enc")
 par(mfrow=c(4,2))
 for(i in 1:7){
   plot(NULL, type="l", xlab="Year AD", ylab=expression(paste("Carbon stock (Mg C h", a^-1, " y", r^-1, ")")), 
-       xlim=c(2024, 2034), ylim=c(0, max(dblCtsts$mean[,i])*1.1), bty="n", main=pool_names[i])
+       xlim=c(2025, 2035), ylim=c(0, max(dblCtsts$mean[,i])*1.25), bty="n", main=pool_names[i])
   pol(future, df=data.frame(mean=ctrlCtsts$mean[,i], sd=ctrlCtsts$sd[,i]), cl=pal1[i])
   pol(future, df=data.frame(mean=dblCtsts$mean[,i], sd=dblCtsts$sd[,i]), cl=pal2[i])
   
 }
 par(mfrow=c(1,1))
+dev.off()
 
 #' The total response of the ecosystem in terms of the total stock overlaps
 #' significantly with the background variability of the control treatment. 
@@ -228,11 +236,14 @@ par(mfrow=c(1,1))
 #' 10 years of the experiment.
 
 #+ fig.width=8, fig.height=10
-pal3<-hcl.colors(4, alpha=0.5)
+
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/TotalC.pdf", encoding = "WinAnsi.enc")
 plot(NULL, type="l", xlab="Year AD", ylab=expression(paste("Total carbon stock (Mg C h", a^-1, ")")), 
-     xlim=c(2024, 2034), ylim=c(0, 500), bty="n")
+     xlim=c(2025, 2035), ylim=c(200, 500), bty="n")
 pol(future, df=data.frame(mean=rowSums(ctrlCtsts$mean), sd=sqrt(rowSums(ctrlCtsts$sd^2))), cl=pal3[1])
 pol(future, df=data.frame(mean=rowSums(dblCtsts$mean), sd=sqrt(rowSums(dblCtsts$sd^2))), cl=pal3[2])
+legend("topleft", c("Control", "+50% GPP"), pch=15, col=pal3, bty="n")
+dev.off()
 
 #' Aboveground biomass carbon is one of the most common measurements in tropical forests.
 #' Model predictions also suggests that statistical differences may not be possible
@@ -250,10 +261,13 @@ pol(future, df=data.frame(mean=rowSums(dblCtsts$mean[,abvg_pools]), sd=sqrt(rowS
 #' for respiration.
 
 #+ fig.width=8, fig.height=10
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/ER.pdf")
 plot(NULL, type="l", xlab="Year AD", ylab=expression(paste("Ecosystem respiration (Mg C h", a^-1, " y", r^-1, ")")), 
-     xlim=c(2024, 2034), ylim=c(0, 80), bty="n")
-pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean), sd=sqrt(rowSums(ctrlRtsts$sd^2))), cl=pal3[3])
-pol(future, df=data.frame(mean=rowSums(dblRtsts$mean), sd=sqrt(rowSums(dblRtsts$sd^2))), cl=pal3[4])
+     xlim=c(2025, 2035), ylim=c(20, 60), bty="n")
+pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean), sd=sqrt(rowSums(ctrlRtsts$sd^2))), cl=pal3[1])
+pol(future, df=data.frame(mean=rowSums(dblRtsts$mean), sd=sqrt(rowSums(dblRtsts$sd^2))), cl=pal3[2])
+legend("topleft", c("Control", "+50% GPP"), pch=15, col=pal3, bty="n")
+dev.off()
 
 #' In particular, autotrophic respiration is responsible for most of the response. 
 
@@ -261,12 +275,18 @@ pol(future, df=data.frame(mean=rowSums(dblRtsts$mean), sd=sqrt(rowSums(dblRtsts$
 autotroph_pools=match(c("Foliage", "Wood", "Fine roots", "Coarse roots"), table=pool_names)
 heterotroph_pools=match(c("Fine litter", "CWD", "Soil (0-30 cm)"), table=pool_names)
 
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/AR.pdf")
 plot(NULL, type="l", xlab="Year AD", ylab=expression(paste("Autotrophic respiration (Mg C h", a^-1, " y", r^-1, ")")), 
-     xlim=c(2024, 2034), ylim=c(0, 40), bty="n")
-pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean[,autotroph_pools]), sd=sqrt(rowSums(ctrlRtsts$sd[,autotroph_pools]^2))), cl=pal3[3])
-pol(future, df=data.frame(mean=rowSums(dblRtsts$mean[,autotroph_pools]), sd=sqrt(rowSums(dblRtsts$sd[,autotroph_pools]^2))), cl=pal3[4])
+     xlim=c(2025, 2035), ylim=c(10, 40), bty="n")
+pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean[,autotroph_pools]), sd=sqrt(rowSums(ctrlRtsts$sd[,autotroph_pools]^2))), cl=pal3[1])
+pol(future, df=data.frame(mean=rowSums(dblRtsts$mean[,autotroph_pools]), sd=sqrt(rowSums(dblRtsts$sd[,autotroph_pools]^2))), cl=pal3[2])
+legend("topleft", c("Control", "+50% GPP"), pch=15, col=pal3, bty="n")
+dev.off()
 
+pdf("~/SOIL-R/Meetings/2025/ATTOworkshop/HR.pdf")
 plot(NULL, type="l", xlab="Year AD", ylab=expression(paste("Heterotrophic respiration (Mg C h", a^-1, " y", r^-1, ")")), 
-     xlim=c(2024, 2034), ylim=c(0, 40), bty="n")
-pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean[,heterotroph_pools]), sd=sqrt(rowSums(ctrlRtsts$sd[,heterotroph_pools]^2))), cl=pal3[3])
-pol(future, df=data.frame(mean=rowSums(dblRtsts$mean[,heterotroph_pools]), sd=sqrt(rowSums(dblRtsts$sd[,heterotroph_pools]^2))), cl=pal3[4])
+     xlim=c(2025, 2035), ylim=c(0, 20), bty="n")
+pol(future, df=data.frame(mean=rowSums(ctrlRtsts$mean[,heterotroph_pools]), sd=sqrt(rowSums(ctrlRtsts$sd[,heterotroph_pools]^2))), cl=pal3[1])
+pol(future, df=data.frame(mean=rowSums(dblRtsts$mean[,heterotroph_pools]), sd=sqrt(rowSums(dblRtsts$sd[,heterotroph_pools]^2))), cl=pal3[2])
+legend("topleft", c("Control", "+50% GPP"), pch=15, col=pal3, bty="n")
+dev.off()
