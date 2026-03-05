@@ -9,6 +9,7 @@
 #'
 #' @return A compartmental matrix
 #' @export
+#' @importFrom SoilR is.compartmental
 #'
 #' @examples
 #' names(modpars[1,])
@@ -44,6 +45,8 @@ makeB=function(pars){
   for(i in 1:length(i_alpha)){
     T[row_alpha[i], col_alpha[i]]<-pars[i_alpha[i]]
   }
-  return(T%*%K)
+  B<-T%*%K
+  is.compartmental(B)
+  return(B)
   
 }
